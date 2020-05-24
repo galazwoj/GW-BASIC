@@ -292,7 +292,7 @@ node_modules/
 **/*.Server/ModelManifest.xml
 _Pvt_Extensions
 
-$ MASM 
+# MASM 
 *.lst
 *.map
 *.exe
