@@ -1,3 +1,5 @@
+This is my adhoc repo to tinker with gs-basic 1.0, partial source code of which has been recently released by Microsoft to Github
+
 # Microsoft GW-BASIC Interpreter Source Code
 
 This repo contains the original source-code for Microsoft's GW-BASIC interpreter, as of 1983.
@@ -19,7 +21,7 @@ All files within this repo are released under the [MIT (OSI) License]( https://e
 
 ## Contributing
 
-The source files in this repo are for historical reference and will remain read-only and unmodified in their original state. Please  **do not** send Pull Requests suggesting any modifications to the source files.  
+The source files in Microsoft repo are for historical reference and will remain read-only and unmodified in their original state. Please  **do not** send Pull Requests suggesting any modifications to the source files.  
 
 Further contribution guidance can be found in the [Contributor's Guide](https://github.com/Microsoft/GW-BASIC/blob/master/CONTRIBUTING.md) stored in the root of this repo.
 

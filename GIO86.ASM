@@ -31,7 +31,11 @@ DSEG	SEGMENT PUBLIC 'DATASG'
 	ASSUME DS:DSEG
 	EXTRN	DEVPTR:WORD,DEVTBL:WORD,DEVINI:WORD,DEVTRM:WORD
 	EXTRN	NLONLY:WORD,RUNFLG:WORD
-	EXTRN	FILMOD:WORD,FILDEV:WORD,FILNM:WORD,FILEXT:WORD
+	EXTRN	FILMOD:WORD,FILNAM:WORD
+	FILDEV EQU FILNAM
+	FILNM  EQU FILNAM+1
+	FILEXT EQU FILNM+FNAML-3
+
 	EXTRN	PTRFIL:WORD,FILTAB:WORD,STKLOW:WORD
 DSEG	ENDS
 
@@ -176,9 +180,9 @@ PNRLEN:	CALL	PRLENC
 	CALL	SYNCHR
 	DB	OFFSET 377O	;else parse "LEN=record-length"
 	CALL	SYNCHR
-	DB	OFFSET $LEN	;LEN is a 2-byte token
+	DW	OFFSET $LEN	;LEN is a 2-byte token
 	CALL	SYNCHR
-	DB	OFFSET EQULTK
+	DW	OFFSET EQULTK
 	EXTRN	INTID2:NEAR
 VARECS:	CALL	INTID2		;[DX]=record size (0..32767)
 	MOV	CX,DX		;return it in CX
@@ -894,7 +898,7 @@ CLSFL1:	CALL	FDBPTR		;[SI] points to FDB [AL]
 	MOV	AH,LOW OFFSET G_CLS
 	CALL	SIDSP		;close FDB pointed to by [SI]
 	MOV	WORD PTR FREFDB,0
-	CALL	FFREE		;Deallocate FDB and remove from FDB Chain
+	CALL	_FFREE		;Deallocate FDB and remove from FDB Chain
 	POP	DX
 	POP	CX
 	POP	BX
@@ -1801,8 +1805,8 @@ PBAX:	POP	BX
 	RET	
 
 
-;FFREE(fdbptr) {free file data block}
-;              {ffree is called by clsfil only}
+;_FFREE(fdbptr) {free file data block}
+;              {_ffree is called by clsfil only}
 ; Entry - SI points to FDB to be freed
 ; Exit  - SI, DI Used
 ;
@@ -1811,7 +1815,7 @@ PBAX:	POP	BX
 ;  nbytes := size of freed file-data-block.
 ;  xfrstr(fdbptr, nbytes); {move string space and lower-FDB's up nbytes}
 ;
-FFREE:	PUSH	AX
+_FFREE:	PUSH	AX
 	PUSH	BX
 	PUSH	CX
 	PUSH	DX
@@ -2072,7 +2076,7 @@ DOALDV:	MOV	AL,LOW OFFSET $_NDEV
 	MOV	DI,AX		;[DI]=2*number of non-disk devices
 DOALLP:	PUSH	BX
 	PUSH	DI
-	CALL	 WORD PTR CS:-2[BX+DI]	;Call initialization/termination routine
+	CALL	 WORD PTR CS:[BX+DI-2]	;Call initialization/termination routine
 	POP	DI
 	POP	BX
 	DEC	DI
@@ -2135,7 +2139,7 @@ DSEG	ENDS
 	MOV	SI,WORD PTR FREFDB
 	OR	SI,SI
 	JZ	NFRFDB		;branch if no FDB needs to be released
-	CALL	FFREE
+	CALL	_FFREE
 NFRFDB:	XOR	AX,AX
 	MOV	WORD PTR FREFDB,AX	;reset FREE-FDB flag
 	CALL	CLSFIL		;close file #0 (if NLONLY=0)

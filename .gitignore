@@ -292,6 +292,12 @@ node_modules/
 **/*.Server/ModelManifest.xml
 _Pvt_Extensions
 
+$ MASM 
+*.lst
+*.map
+*.exe
+*.com
+
 # Paket dependency manager
 .paket/paket.exe
 paket-files/
@@ -348,3 +354,15 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
+
+# adhoc created files
+*.bat
+LOST.TXT
+log.txt
+SORT.TXT
+sort.txt
+a.a
+x.x
+x
+xx
+xxx
